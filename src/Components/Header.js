@@ -25,7 +25,7 @@ const Header = () => {
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const { currency, setCurrency } = CryptoState()
+  const { currency, setCurrency } = CryptoState();
 
   const darkTheme = createTheme({
     palette: {
@@ -54,7 +54,7 @@ const Header = () => {
             </Typography>
             <Select
               variant="outlined"
-              style={{ width: 100, height: 40, marginRight: 15}}
+              style={{ width: 100, height: 40, marginRight: 15 }}
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
             >
