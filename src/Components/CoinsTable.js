@@ -5,6 +5,7 @@ import { CryptoState } from "../CryptoContext";
 import {
   Container,
   LinearProgress,
+  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -31,12 +32,18 @@ const useStyles = makeStyles(() => ({
     },
     fontFamily: "Montserrat",
   },
+  pagination: {
+    "& .MuiPaginationItem-root": {
+      color: "gold",
+    },
+  },
 }));
 
 const CoinsTable = () => {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   const { currency, symbol } = CryptoState();
 
@@ -82,10 +89,12 @@ const CoinsTable = () => {
   });
 
   const handleSearch = () => {
+    const searchTerm = search.toLowerCase();
+
     return (coins || []).filter(
       (coin) =>
-        coin.name.toLowerCase().includes(search) ||
-        coin.symbol.toLowerCase().includes(search)
+        coin.name.toLowerCase().includes(searchTerm) ||
+        coin.symbol.toLowerCase().includes(searchTerm)
     );
   };
 
@@ -131,64 +140,82 @@ const CoinsTable = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {handleSearch().map((row) => {
-                  const currencyData = row.quote[currency];
+                {handleSearch()
+                  .slice((page - 1) * 10, (page - 1) * 10 + 10)
+                  .map((row) => {
+                    const currencyData = row.quote[currency];
 
-                  if (!currencyData) {
-                    return null;
-                  }
+                    if (!currencyData) {
+                      return null;
+                    }
 
-                  const profit = currencyData.volume_change_24h > 0;
+                    const profit = currencyData.volume_change_24h > 0;
 
-                  return (
-                    <TableRow className={classes.row} key={row.name}>
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        style={{
-                          display: "flex",
-                          gap: 15,
-                        }}
-                      >
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
+                    return (
+                      <TableRow className={classes.row} key={row.name}>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          style={{
+                            display: "flex",
+                            gap: 15,
+                          }}
                         >
-                          <span
-                            style={{
-                              textTransform: "uppercase",
-                              fontSize: 22,
-                            }}
+                          <div
+                            style={{ display: "flex", flexDirection: "column" }}
                           >
-                            {row.symbol}
-                          </span>
-                          <span style={{ color: "darkgrey" }}>{row.name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="right">
-                        {symbol}{" "}
-                        {numberWithCommas(currencyData.price.toFixed(2))}
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        style={{
-                          color: profit > 0 ? "rgb(14, 203, 129)" : "red",
-                          fontWeight: 500,
-                        }}
-                      >
-                        {profit && "+"}
-                        {currencyData.volume_change_24h.toFixed(2)}%
-                      </TableCell>
-                      <TableCell align="right">
-                        {symbol}{" "}
-                        {numberWithCommas(currencyData.market_cap.toFixed(2))}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                            <span
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: 22,
+                              }}
+                            >
+                              {row.symbol}
+                            </span>
+                            <span style={{ color: "darkgrey" }}>
+                              {row.name}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell align="right">
+                          {symbol}{" "}
+                          {numberWithCommas(currencyData.price.toFixed(2))}
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          style={{
+                            color: profit > 0 ? "rgb(14, 203, 129)" : "red",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {profit && "+"}
+                          {currencyData.volume_change_24h.toFixed(2)}%
+                        </TableCell>
+                        <TableCell align="right">
+                          {symbol}{" "}
+                          {numberWithCommas(currencyData.market_cap.toFixed(2))}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           )}
         </TableContainer>
+        <Pagination
+          style={{
+            padding: 20,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+          classes={{ ul: classes.pagination }}
+          count={(handleSearch()?.length / 10).toFixed(0)}
+          onChange={(_, value) => {
+            setPage(value);
+            window.scroll(0, 450);
+          }}
+        />
       </Container>
     </ThemeProvider>
   );
