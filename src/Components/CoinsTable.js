@@ -33,7 +33,7 @@ const CoinsTable = () => {
   const fetchCoins = async () => {
     setLoading(true);
 
-    const apiUrl = CoinList(1, 100, currency);
+    const apiUrl = CoinList(1, 100, currency, `${process.env.REACT_APP_CMC_API_KEY}`);
 
     try {
       const proxyUrl = "https://cors-anywhere.herokuapp.com/" + apiUrl;
@@ -41,6 +41,7 @@ const CoinsTable = () => {
       const { data } = await axios.get(proxyUrl, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
+          "X-CMC_PRO_API_KEY": `${process.env.REACT_APP_CMC_API_KEY}`,
         },
       });
 
