@@ -53,7 +53,6 @@ const CoinsTable = () => {
     const apiUrl = CoinList(1, 100, currency);
 
     try {
-      // Adicione o prefixo do CORS Anywhere à URL da API
       const proxyUrl = "https://cors-anywhere.herokuapp.com/" + apiUrl;
 
       const { data } = await axios.get(proxyUrl, {
@@ -128,7 +127,7 @@ const CoinsTable = () => {
                         fontFamily: "Montserrat",
                       }}
                       key={head}
-                      align={head === "Coin" ? "" : "right"}
+                      align={head === "Coin" ? undefined : "right"}
                     >
                       {head}
                     </TableCell>
