@@ -8,21 +8,11 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { CryptoState } from "../CryptoContext";
 
-const useStyles = makeStyles(() => ({
-  title: {
-    cursor: "pointer",
-    color: "gold",
-    flex: 1,
-  },
-}));
-
 const Header = () => {
-  const classes = useStyles();
   const navigate = useNavigate();
 
   const { currency, setCurrency } = CryptoState();
@@ -44,8 +34,10 @@ const Header = () => {
             <Typography
               onClick={() => navigate("/")}
               variant="h6"
-              className={classes.title}
               style={{
+                cursor: "pointer",
+                color: "gold",
+                flex: 1,
                 fontFamily: "Montserrat",
                 fontWeight: "bold",
               }}

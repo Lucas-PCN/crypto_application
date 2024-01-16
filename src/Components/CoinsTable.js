@@ -17,27 +17,10 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 
 export function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-
-const useStyles = makeStyles(() => ({
-  row: {
-    backgroundColor: "#16171a",
-    cursor: "pointer",
-    "&:hover": {
-      backgroundColor: "#131111",
-    },
-    fontFamily: "Montserrat",
-  },
-  pagination: {
-    "& .MuiPaginationItem-root": {
-      color: "gold",
-    },
-  },
-}));
 
 const CoinsTable = () => {
   const [coins, setCoins] = useState([]);
@@ -93,8 +76,6 @@ const CoinsTable = () => {
     );
   };
 
-  const classes = useStyles();
-
   return (
     <ThemeProvider theme={darkTheme}>
       <Container style={{ textAlign: "center" }}>
@@ -147,7 +128,14 @@ const CoinsTable = () => {
                     const profit = currencyData.volume_change_24h > 0;
 
                     return (
-                      <TableRow className={classes.row} key={row.name}>
+                      <TableRow
+                        style={{
+                          backgroundColor: "#16171a",
+                          fontFamily: "Montserrat",
+                        }}
+                        key={row.name}
+                        hover
+                      >
                         <TableCell
                           component="th"
                           scope="row"
@@ -204,7 +192,6 @@ const CoinsTable = () => {
             display: "flex",
             justifyContent: "center",
           }}
-          classes={{ ul: classes.pagination }}
           count={Math.floor(handleSearch()?.length / 10)}
           onChange={(_, value) => {
             setPage(value);
