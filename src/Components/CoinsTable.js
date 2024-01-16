@@ -62,8 +62,6 @@ const CoinsTable = () => {
         },
       });
 
-      console.log("Dados da API:", data.data);
-
       setCoins(Array.isArray(data.data) ? data.data : []);
       setLoading(false);
     } catch (error) {
@@ -71,8 +69,6 @@ const CoinsTable = () => {
       setLoading(false);
     }
   };
-
-  console.log(coins);
 
   useEffect(() => {
     fetchCoins();
